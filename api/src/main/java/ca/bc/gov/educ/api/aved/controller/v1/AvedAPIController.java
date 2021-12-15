@@ -4,8 +4,7 @@ import ca.bc.gov.educ.api.aved.endpoint.v1.AvedApiEndpoint;
 import ca.bc.gov.educ.api.aved.exception.InvalidPayloadException;
 import ca.bc.gov.educ.api.aved.exception.errors.ApiError;
 import ca.bc.gov.educ.api.aved.service.v1.AvedService;
-import ca.bc.gov.educ.api.aved.struct.v1.PenRequestResult;
-import ca.bc.gov.educ.api.aved.struct.v1.Request;
+import ca.bc.gov.educ.api.aved.struct.v1.*;
 import ca.bc.gov.educ.api.aved.validator.AvedPayloadValidator;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -48,7 +47,24 @@ public class AvedAPIController implements AvedApiEndpoint {
 
 
   @Override
-  public Mono<ResponseEntity<PenRequestResult>> penRequest(final Request request) {
+  public Mono<ResponseEntity<BcscPenRequestResult>> bcscRequest(BcscPenRequest request) {
+    validateRequest(request);
+    return this.avedService.postPenRequestToBatchAPI(request);
+  }
+
+  @Override
+  public Mono<ResponseEntity<PenRequestResult>> penRequest(final PenRequest request) {
+    validateRequest(request);
+    return this.avedService.postPenRequestToBatchAPI(request);
+  }
+
+  @Override
+  public Mono<ResponseEntity<PenValidationResult>> penValidation(PenValidationRequest request) {
+    validateRequest(request);
+    return this.avedService.validatePenRequestDetail(request);
+  }
+
+  private void validateRequest(Request request) {
     // struct validation
     val payloadErrors = this.avedPayloadValidator.validatePenRequestPayload(request);
     if (!payloadErrors.isEmpty()) {
@@ -56,7 +72,6 @@ public class AvedAPIController implements AvedApiEndpoint {
       error.addValidationErrors(payloadErrors);
       throw new InvalidPayloadException(error);
     }
-    return this.avedService.postPenRequestToBatchAPI(request);
   }
 
 }

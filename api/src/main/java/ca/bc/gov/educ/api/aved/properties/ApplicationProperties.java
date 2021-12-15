@@ -40,27 +40,9 @@ public class ApplicationProperties {
   private String penRegBatchApiUrl;
 
   /**
-   * The School api url.
-   */
-  @Value("${url.api.school}")
-  private String schoolApiUrl;
-
-  /**
-   * The Pen services api url.
-   */
-  @Value("${url.api.pen.services}")
-  private String penServicesApiURL;
-
-  /**
    * The Pen match api url.
    */
   @Value("${url.api.pen.match}")
   private String penMatchApiURL;
-
-  /**
-   * The Student api url.
-   */
-  @Value("${url.api.student}")
-  private String studentApiURL;
 
 }

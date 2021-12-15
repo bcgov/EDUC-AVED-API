@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PenRequestResult {
+public class PenValidationResult {
 
   /**
-   * The Pen.
+   * Flag for demographics matching PEN (True or False).
    */
-  String pen;
+  String demographicsMatchPEN;
 }

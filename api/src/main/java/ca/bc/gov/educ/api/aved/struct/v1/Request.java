@@ -1,35 +1,36 @@
 package ca.bc.gov.educ.api.aved.struct.v1;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
  * The type Request.
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class Request extends PenRequestBatchSubmissionStudent {
+public class Request {
+
   /**
-   * The Mincode.
+   * The Birth date.
    */
   @Size(max = 8, min = 8)
-  @NotNull
-  String mincode;
-
+  @NotBlank
+  String birthDate;
   /**
-   * The Create user.
+   * The Gender.
    */
-  @Size(max = 32)
-  @NotNull
-  String createUser;
-
+  @NotBlank
+  @Size(max = 1, min = 1)
+  @Pattern(regexp = "[MFUX]")
+  String gender;
   /**
-   * The Update user.
+   * The Postal code.
    */
-  @Size(max = 32)
-  @NotNull
-  String updateUser;
+  @Size(max = 6, min = 6)
+  @Pattern(regexp = "^([A-Z]\\d[A-Z]\\d[A-Z]\\d|)$")
+  @NotBlank
+  String postalCode;
+
 }

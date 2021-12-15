@@ -1,7 +1,6 @@
 package ca.bc.gov.educ.api.aved.endpoint.v1;
 
-import ca.bc.gov.educ.api.aved.struct.v1.PenRequestResult;
-import ca.bc.gov.educ.api.aved.struct.v1.Request;
+import ca.bc.gov.educ.api.aved.struct.v1.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,10 +21,23 @@ import reactor.core.publisher.Mono;
  * The interface Pen my ed api endpoint.
  */
 @RequestMapping("/api/v1/aved")
-@OpenAPIDefinition(info = @Info(title = "API for Pen Aved Integration.", description = "This API exposes different endpoints for Aved.", version = "1"), security =
+@OpenAPIDefinition(info = @Info(title = "API for Pen AVED Integration.", description = "This API exposes different endpoints for AVED.", version = "1"), security =
   {@SecurityRequirement(name =
-    "OAUTH2", scopes = {"AVED_READ_PEN_REQUEST_BATCH", "AVED_WRITE_PEN_REQUEST_BATCH", "AVED_READ_PEN_COORDINATOR", "AVED_VALIDATE_PEN"})})
+    "OAUTH2", scopes = {"AVED_PEN_REQUEST", "AVED_PEN_VALIDATION"})})
 public interface AvedApiEndpoint {
+
+  /**
+   * Pen request mono.
+   *
+   * @param request the request
+   * @return the mono
+   */
+  @PostMapping("/bcsc-pen-request")
+  @PreAuthorize("hasAuthority('SCOPE_AVED_PEN_REQUEST')")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "BcscPenRequestResult", implementation = BcscPenRequestResult.class))), @ApiResponse(responseCode = "300", description = "Multiple Choices")})
+  @Tag(name = "Endpoint to request a student PEN via BCSC.", description = "Endpoint to request a student PEN via BCSC.")
+  @Schema(name = "BcscPenRequest", implementation = BcscPenRequest.class)
+  Mono<ResponseEntity<BcscPenRequestResult>> bcscRequest(@Validated @RequestBody BcscPenRequest request);
 
   /**
    * Pen request mono.
@@ -35,9 +47,22 @@ public interface AvedApiEndpoint {
    */
   @PostMapping("/pen-request")
   @PreAuthorize("hasAuthority('SCOPE_AVED_PEN_REQUEST')")
-  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "PenRequestResult", implementation = PenRequestResult.class))), @ApiResponse(responseCode = "201", description = "CREATED", content = @Content(schema = @Schema(name = "PenRequestResult", implementation = PenRequestResult.class))), @ApiResponse(responseCode = "300", description = "Multiple Choices")})
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "PenRequestResult", implementation = PenRequestResult.class))), @ApiResponse(responseCode = "300", description = "Multiple Choices")})
   @Tag(name = "Endpoint to request a student PEN.", description = "Endpoint to request a student PEN.")
-  @Schema(name = "Request", implementation = Request.class)
-  Mono<ResponseEntity<PenRequestResult>> penRequest(@Validated @RequestBody Request request);
+  @Schema(name = "PENRequest", implementation = PenRequest.class)
+  Mono<ResponseEntity<PenRequestResult>> penRequest(@Validated @RequestBody PenRequest request);
+
+  /**
+   * Pen validation mono.
+   *
+   * @param request the request
+   * @return the mono
+   */
+  @PostMapping("/pen-validation")
+  @PreAuthorize("hasAuthority('SCOPE_AVED_PEN_VALIDATION')")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "PenValidationResult", implementation = PenValidationResult.class)))})
+  @Tag(name = "Endpoint to validate a student PEN.", description = "Endpoint to validate a student PEN.")
+  @Schema(name = "PENValidationRequest", implementation = PenValidationRequest.class)
+  Mono<ResponseEntity<PenValidationResult>> penValidation(@Validated @RequestBody PenValidationRequest request);
 
 }
