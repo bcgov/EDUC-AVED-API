@@ -6,22 +6,14 @@ import ca.bc.gov.educ.api.aved.struct.v1.PenRequestResult;
 import ca.bc.gov.educ.api.aved.struct.v1.PenValidationRequest;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchStudent;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.threads.EnhancedQueueExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
-import java.util.concurrent.Executor;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * The type Rest utils.
@@ -98,9 +90,9 @@ public class RestUtils {
       });
   }
 
-  public Mono<ResponseEntity<PenMatchResult>> postToMatchAPI(final PenMatchStudent request) {
+  public Mono<ResponseEntity<PenMatchResult>> postToMatchAPI(PenMatchStudent request) {
     return this.webClient.post()
-      .uri(this.props.getPenMatchApiURL(), uriBuilder -> uriBuilder.path("/pen-match").build())
+      .uri(this.props.getPenMatchApiURL() + "/pen-match")
       .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
       .body(Mono.just(request), PenMatchStudent.class)
       .exchangeToMono(response ->
