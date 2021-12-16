@@ -90,7 +90,7 @@ public class RestUtils {
   public Optional<PenMatchResult> postToMatchAPI(PenMatchStudent request) {
     try {
       val response = this.webClient.post()
-        .uri(this.props.getPenMatchApiURL() + "/pen-match")
+        .uri(this.props.getPenMatchApiURL())
         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .body(Mono.just(request), PenMatchStudent.class)
         .retrieve()
