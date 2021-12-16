@@ -19,7 +19,7 @@ public class JWSBuilder {
     claims.setExpirationTimeMinutesInTheFuture(10F); // identifies the expiration time on or after which the JWT MUST NOT be accepted for processing
     claims.setIssuedAtToNow(); // identifies the time at which the JWT was issued
     claims.setClaim("azp", "example-client-id"); // Authorized party - the party to which the ID Token was issued
-    claims.setClaim("scope", "SOAM_LOGIN "); // Scope Values
+    claims.setClaim("scope", "AVED_PEN_VALIDATION "); // Scope Values
 
     var jws = new JsonWebSignature();
     jws.setPayload(claims.toJson());

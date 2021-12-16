@@ -5,15 +5,15 @@ import ca.bc.gov.educ.api.aved.rest.RestUtils;
 import ca.bc.gov.educ.api.aved.service.v1.AvedService;
 import ca.bc.gov.educ.api.aved.struct.v1.PenValidationRequest;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -21,10 +21,9 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest
-public class AvedServiceTest {
+class AvedServiceTest {
 
   private static final String correlationID = UUID.randomUUID().toString();
   @Autowired
@@ -36,13 +35,13 @@ public class AvedServiceTest {
   @MockBean
   RestUtils restUtils;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     openMocks(this);
   }
 
   @Test
-  public void testPerformLogin_GivenDigitalIdExistAndServiceCardDoesNot_ShouldUpdateDigitalIdAndCreateServicesCard() {
+  void testPerformLogin_GivenDigitalIdExistAndServiceCardDoesNot_ShouldUpdateDigitalIdAndCreateServicesCard() {
     final PenValidationRequest student = this.createPenValidationRequest();
     final PenMatchResult result = this.createPenMatchResponse();
     when(this.restUtils.postToMatchAPI(any())).thenReturn(Mono.just(ResponseEntity.ok(result)));
