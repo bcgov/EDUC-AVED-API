@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import reactor.core.publisher.Mono;
 
 /**
  * The interface Pen my ed api endpoint.
@@ -37,7 +36,7 @@ public interface AvedApiEndpoint {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "BcscPenRequestResult", implementation = BcscPenRequestResult.class))), @ApiResponse(responseCode = "300", description = "Multiple Choices")})
   @Tag(name = "Endpoint to request a student PEN via BCSC.", description = "Endpoint to request a student PEN via BCSC.")
   @Schema(name = "BcscPenRequest", implementation = BcscPenRequest.class)
-  Mono<ResponseEntity<BcscPenRequestResult>> bcscRequest(@Validated @RequestBody BcscPenRequest request);
+  ResponseEntity<BcscPenRequestResult> bcscRequest(@Validated @RequestBody BcscPenRequest request);
 
   /**
    * Pen request mono.
@@ -50,7 +49,7 @@ public interface AvedApiEndpoint {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "PenRequestResult", implementation = PenRequestResult.class))), @ApiResponse(responseCode = "300", description = "Multiple Choices")})
   @Tag(name = "Endpoint to request a student PEN.", description = "Endpoint to request a student PEN.")
   @Schema(name = "PENRequest", implementation = PenRequest.class)
-  Mono<ResponseEntity<PenRequestResult>> penRequest(@Validated @RequestBody PenRequest request);
+  ResponseEntity<PenRequestResult> penRequest(@Validated @RequestBody PenRequest request);
 
   /**
    * Pen validation mono.
@@ -63,6 +62,6 @@ public interface AvedApiEndpoint {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(name = "PenValidationResult", implementation = PenValidationResult.class)))})
   @Tag(name = "Endpoint to validate a student PEN.", description = "Endpoint to validate a student PEN.")
   @Schema(name = "PENValidationRequest", implementation = PenValidationRequest.class)
-  Mono<ResponseEntity<PenValidationResult>> penValidation(@Validated @RequestBody PenValidationRequest request);
+  ResponseEntity<PenValidationResult> penValidation(@Validated @RequestBody PenValidationRequest request);
 
 }

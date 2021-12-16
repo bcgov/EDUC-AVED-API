@@ -47,21 +47,21 @@ public class AvedAPIController implements AvedApiEndpoint {
 
 
   @Override
-  public Mono<ResponseEntity<BcscPenRequestResult>> bcscRequest(BcscPenRequest request) {
+  public ResponseEntity<BcscPenRequestResult> bcscRequest(BcscPenRequest request) {
     validateRequest(request);
-    return this.avedService.postPenRequestToBatchAPI(request);
+    return ResponseEntity.ok(this.avedService.postPenRequestToBatchAPI(request));
   }
 
   @Override
-  public Mono<ResponseEntity<PenRequestResult>> penRequest(final PenRequest request) {
+  public ResponseEntity<PenRequestResult> penRequest(final PenRequest request) {
     validateRequest(request);
-    return this.avedService.postPenRequestToBatchAPI(request);
+    return ResponseEntity.ok(this.avedService.postPenRequestToBatchAPI(request));
   }
 
   @Override
-  public Mono<ResponseEntity<PenValidationResult>> penValidation(PenValidationRequest request) {
+  public ResponseEntity<PenValidationResult> penValidation(PenValidationRequest request) {
     validateRequest(request);
-    return this.avedService.validatePenRequestDetail(request);
+    return ResponseEntity.ok(this.avedService.validatePenRequestDetail(request));
   }
 
   private void validateRequest(Request request) {

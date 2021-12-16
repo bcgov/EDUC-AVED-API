@@ -1,8 +1,8 @@
 package ca.bc.gov.educ.api.aved.exception;
 
 import ca.bc.gov.educ.api.aved.exception.errors.ApiError;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jboss.logging.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -23,14 +23,9 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
  * The type Rest exception handler.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@Slf4j
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
-  /**
-   * The constant log.
-   */
-  private static final Logger log = Logger.getLogger(RestExceptionHandler.class);
-
 
   /**
    * Build response entity response entity.

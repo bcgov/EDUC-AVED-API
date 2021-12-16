@@ -21,10 +21,4 @@ public class MockConfiguration {
     return Mockito.mock(WebClient.class);
   }
 
-  @Bean
-  @Primary
-  public WebTestClient webTestClient() {
-    return Mockito.mock(WebTestClient.class);
-  }
-
 }

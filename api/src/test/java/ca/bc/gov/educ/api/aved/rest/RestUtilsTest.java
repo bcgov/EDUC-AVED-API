@@ -1,40 +1,42 @@
 package ca.bc.gov.educ.api.aved.rest;
 
-import ca.bc.gov.educ.api.aved.AvedApiApplicationTests;
 import ca.bc.gov.educ.api.aved.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchStudent;
 import lombok.val;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest
 @SuppressWarnings("java:S5778")
-class RestUtilsTest extends AvedApiApplicationTests {
+public class RestUtilsTest {
   private static final String correlationID = UUID.randomUUID().toString();
   @Autowired
   RestUtils restUtils;
+
+  @Autowired
+  WebClient webClient;
 
   @Autowired
   ApplicationProperties props;
@@ -53,17 +55,18 @@ class RestUtilsTest extends AvedApiApplicationTests {
   @Mock
   private WebClient.ResponseSpec responseMock;
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    //openMocks(this);
+  @Before
+  public void setUp() {
+    when(this.webClient.get()).thenReturn(this.requestHeadersUriMock);
+    openMocks(this);
   }
 
-  @AfterEach
-  public void tearDown() throws Exception {
+  @After
+  public void tearDown() {
   }
 
   @Test
-  void testGetPenMatchResult_givenAPICallSuccess_shouldReturnPenMatchResult() {
+  public void testGetPenMatchResult_givenAPICallSuccess_shouldReturnPenMatchResult() {
     final PenMatchStudent student = this.createPenMatchStudent();
     final PenMatchResult penMatchResult = this.createPenMatchResponse();
     when(this.webClient.post()).thenReturn(this.requestBodyUriMock);
@@ -71,14 +74,12 @@ class RestUtilsTest extends AvedApiApplicationTests {
     when(this.requestBodyUriMock.header(any(), any())).thenReturn(this.returnMockBodySpec());
     when(this.requestBodyMock.body(any(), (Class<?>) any(Object.class))).thenReturn(this.requestHeadersMock);
     when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
-    when(this.requestHeadersMock.exchangeToMono(any())).thenReturn(Mono.just(ResponseEntity.ok().body(penMatchResult)));
-    //when(this.webClient.post()).thenAnswer((Answer<WebClient.RequestBodyUriSpec>) spec -> this.requestBodyUriMock);
-
+    when(this.responseMock.bodyToMono(PenMatchResult.class)).thenReturn(Mono.just(penMatchResult));
 
     val response = this.restUtils.postToMatchAPI(student);
     assertThat(response).isNotNull();
-    assertThat(response.block().getBody()).isNotNull();
-    assertThat(response.block().getBody().getPenStatus()).isNotNull();
+    assertThat(response.isPresent()).isTrue();
+    assertThat(response.get().getPenStatus()).isNotNull();
   }
 
   private WebClient.RequestBodySpec returnMockBodySpec() {
