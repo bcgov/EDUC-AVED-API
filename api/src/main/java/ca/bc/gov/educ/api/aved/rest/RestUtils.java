@@ -94,11 +94,6 @@ public class RestUtils {
   }
 
   public Optional<SoamLoginEntity> performLink(BcscPenRequest servicesCard) {
-    String url = props.getSoamApiURL();
-    final String correlationID = logAndGetCorrelationID(servicesCard.getDid(), url, HttpMethod.POST.toString());
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-    headers.add("correlationID", correlationID);
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("birthDate", servicesCard.getBirthDate());
     map.add("did", servicesCard.getDid());
@@ -111,13 +106,11 @@ public class RestUtils {
     map.add("surname", servicesCard.getSurname());
     map.add("userDisplayName", servicesCard.getUserDisplayName());
 
-    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-
     try {
       val response = this.webClient.post()
         .uri(this.props.getSoamApiURL())
-        .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .body(Mono.just(request), HttpEntity.class)
+        .header(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        .body(Mono.just(map), MultiValueMap.class)
         .retrieve()
         .bodyToMono(SoamLoginEntity.class)
         .doOnSuccess(entity -> {
@@ -136,14 +129,4 @@ public class RestUtils {
     }
   }
 
-  private String logAndGetCorrelationID(String identifierValue, String url, String httpMethod) {
-    final String correlationID = UUID.randomUUID().toString();
-    MDC.put("correlation_id", correlationID);
-    MDC.put("user_guid", identifierValue);
-    MDC.put("client_http_request_url", url);
-    MDC.put("client_http_request_method", httpMethod);
-    log.info("Correlation id for did=" + identifierValue + " is=" + correlationID);
-    MDC.clear();
-    return correlationID;
-  }
 }
