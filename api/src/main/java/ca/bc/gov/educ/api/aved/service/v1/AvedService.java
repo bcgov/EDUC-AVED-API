@@ -6,6 +6,7 @@ import ca.bc.gov.educ.api.aved.rest.RestUtils;
 import ca.bc.gov.educ.api.aved.struct.v1.*;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchStudent;
+import ca.bc.gov.educ.api.aved.struct.v1.soam.SoamLoginEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class AvedService {
     this.restUtils = restUtils;
   }
 
-  public Pair<Integer, PenRequestResult> postPenRequestToBatchAPI(final PenRequest request) {
+  public Pair<Integer, PenRequestResult> postToMatchAPI(final PenRequest request) {
     Optional<PenMatchResult> optional = this.restUtils.postToMatchAPI(PenMatchStudentMapper.mapper.toPenMatchStudent(request));
     if(optional.isPresent()) {
       return getPenRequestResult(optional.get());
@@ -44,20 +45,9 @@ public class AvedService {
     }
   }
 
-  public Pair<Integer, BcscPenRequestResult> postPenRequestToBatchAPI(final BcscPenRequest request) {
-    PenRequest penRequest = new PenRequest();
-    penRequest.setLegalSurname(request.getSurname());
-    penRequest.setLegalGivenName(request.getGivenName());
-    if (request.getGivenNames() != null && request.getGivenName() != null) {
-      penRequest.setLegalMiddleName(request.getGivenNames().replaceAll(request.getGivenName(), "").trim());
-    } else if (request.getGivenNames() != null) {
-      penRequest.setLegalMiddleName(request.getGivenNames());
-    }
-    penRequest.setBirthDate(request.getBirthDate());
-    penRequest.setGender(request.getGender());
-    penRequest.setPostalCode(request.getPostalCode());
-    Pair<Integer, PenRequestResult> penRequestResult = postPenRequestToBatchAPI(penRequest);
-    return Pair.of(penRequestResult.getLeft(), getBcscPenRequestResult(penRequestResult.getRight(), request));
+  public Pair<Integer, BcscPenRequestResult> postToSOAMAPI(final BcscPenRequest request) {
+    Optional<SoamLoginEntity> optional = this.restUtils.performLink(request);
+    return Pair.of(HttpStatus.OK.value(), getBcscPenRequestResult(optional.get(), request));
   }
 
   public Pair<Integer, PenValidationResult> validatePenRequestDetail(final PenValidationRequest request) {
@@ -70,10 +60,10 @@ public class AvedService {
     }
   }
 
-  private BcscPenRequestResult getBcscPenRequestResult(final PenRequestResult penRequestResult, final BcscPenRequest request) {
+  private BcscPenRequestResult getBcscPenRequestResult(final SoamLoginEntity soamLoginEntity, final BcscPenRequest request) {
     BcscPenRequestResult bcscResult = new BcscPenRequestResult();
     bcscResult.setDid(request.getDid());
-    bcscResult.setPen(penRequestResult.getPen());
+    bcscResult.setPen(soamLoginEntity.getStudent().getPen());
     return bcscResult;
   }
 

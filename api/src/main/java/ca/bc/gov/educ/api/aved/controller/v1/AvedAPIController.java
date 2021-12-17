@@ -11,7 +11,6 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
@@ -49,14 +48,14 @@ public class AvedAPIController implements AvedApiEndpoint {
   @Override
   public ResponseEntity<BcscPenRequestResult> bcscRequest(BcscPenRequest request) {
     validateRequest(request);
-    val pair = this.avedService.postPenRequestToBatchAPI(request);
+    val pair = this.avedService.postToSOAMAPI(request);
     return ResponseEntity.status(pair.getKey()).body(pair.getValue());
   }
 
   @Override
   public ResponseEntity<PenRequestResult> penRequest(final PenRequest request) {
     validateRequest(request);
-    val pair = this.avedService.postPenRequestToBatchAPI(request);
+    val pair = this.avedService.postToMatchAPI(request);
     return ResponseEntity.status(pair.getKey()).body(pair.getValue());
   }
 

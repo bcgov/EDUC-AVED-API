@@ -39,4 +39,9 @@ public class ApplicationProperties {
   @Value("${url.api.pen.match}")
   private String penMatchApiURL;
 
+  /**
+   * The Pen match api url.
+   */
+  @Value("${url.api.soam}")
+  private String soamApiURL;
 }
