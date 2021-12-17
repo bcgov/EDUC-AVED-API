@@ -63,30 +63,6 @@ public class RestUtils {
     return "Unexpected HTTP return code: " + status + " error message: " + body;
   }
 
-  public Optional<PenRequestResult> postPenRequestToBatchAPI(@NonNull final PenRequest request) {
-    try {
-      val response = this.webClient.post()
-        .uri(this.props.getPenRegBatchApiUrl() + "/pen-request")
-        .header(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .body(Mono.just(request), PenRequest.class)
-        .retrieve()
-        .bodyToMono(PenRequestResult.class)
-        .doOnSuccess(entity -> {
-          if (entity != null) {
-            this.logSuccess(entity.toString());
-          }
-        })
-        .block();
-      if (response == null) {
-        throw new AvedAPIRuntimeException(this.getErrorMessageString(HttpStatus.INTERNAL_SERVER_ERROR, NULL_BODY_FROM +
-          "penRequest get call."));
-      }
-      return Optional.of(response);
-    } catch (final WebClientResponseException e) {
-      throw new AvedAPIRuntimeException(this.getErrorMessageString(e.getStatusCode(), e.getResponseBodyAsString()));
-    }
-  }
-
   public Optional<PenMatchResult> postToMatchAPI(PenMatchStudent request) {
     try {
       val response = this.webClient.post()

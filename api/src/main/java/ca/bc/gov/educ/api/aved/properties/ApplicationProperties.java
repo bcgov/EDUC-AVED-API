@@ -34,12 +34,6 @@ public class ApplicationProperties {
   private String tokenURL;
 
   /**
-   * The Pen reg batch api url.
-   */
-  @Value("${url.api.pen.reg.batch}")
-  private String penRegBatchApiUrl;
-
-  /**
    * The Pen match api url.
    */
   @Value("${url.api.pen.match}")

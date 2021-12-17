@@ -78,7 +78,7 @@ public class AvedControllerTest  {
     final PenMatchStudent student = this.createPenMatchStudent();
     final PenMatchResult penMatchResult = this.createPenMatchResponse();
     when(this.webClient.post()).thenReturn(this.requestBodyUriMock);
-    when(this.requestBodyUriMock.uri(this.props.getPenMatchApiURL() + "/pen-match")).thenReturn(this.requestBodyUriMock);
+    when(this.requestBodyUriMock.uri(this.props.getPenMatchApiURL())).thenReturn(this.requestBodyUriMock);
     when(this.requestBodyUriMock.header(any(), any())).thenReturn(this.returnMockBodySpec());
     when(this.requestBodyMock.body(any(), (Class<?>) any(Object.class))).thenReturn(this.requestHeadersMock);
     when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);

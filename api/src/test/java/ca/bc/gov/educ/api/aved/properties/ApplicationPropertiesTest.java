@@ -22,7 +22,6 @@ public class ApplicationPropertiesTest {
     assertThat(this.properties.getPenMatchApiURL()).isNotNull();
     assertThat(this.properties.getClientID()).isNotNull();
     assertThat(this.properties.getClientSecret()).isNotNull();
-    assertThat(this.properties.getPenRegBatchApiUrl()).isNotNull();
     assertThat(this.properties.getTokenURL()).isNotNull();
   }
 }
