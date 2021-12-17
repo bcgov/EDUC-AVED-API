@@ -47,7 +47,11 @@ public class AvedService {
 
   public Pair<Integer, BcscPenRequestResult> postToSOAMAPI(final BcscPenRequest request) {
     Optional<SoamLoginEntity> optional = this.restUtils.performLink(request);
-    return Pair.of(HttpStatus.OK.value(), getBcscPenRequestResult(optional.get(), request));
+    if(optional.isPresent()) {
+      return Pair.of(HttpStatus.OK.value(), getBcscPenRequestResult(optional.get(), request));
+    } else {
+      throw new AvedAPIRuntimeException("Error occurred while calling SOAM API");
+    }
   }
 
   public Pair<Integer, PenValidationResult> validatePenRequestDetail(final PenValidationRequest request) {
@@ -63,7 +67,10 @@ public class AvedService {
   private BcscPenRequestResult getBcscPenRequestResult(final SoamLoginEntity soamLoginEntity, final BcscPenRequest request) {
     BcscPenRequestResult bcscResult = new BcscPenRequestResult();
     bcscResult.setDid(request.getDid());
-    bcscResult.setPen(soamLoginEntity.getStudent().getPen());
+
+    if(soamLoginEntity != null && soamLoginEntity.getStudent() != null) {
+      bcscResult.setPen(soamLoginEntity.getStudent().getPen());
+    }
     return bcscResult;
   }
 

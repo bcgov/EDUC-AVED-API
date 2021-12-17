@@ -71,7 +71,7 @@ public class RestUtilsTest {
     final PenMatchResult penMatchResult = this.createPenMatchResponse();
     when(this.webClient.post()).thenReturn(this.requestBodyUriMock);
     when(this.requestBodyUriMock.uri(this.props.getPenMatchApiURL())).thenReturn(this.requestBodyUriMock);
-    when(this.requestBodyUriMock.header(any(), any())).thenReturn(this.returnMockBodySpec());
+    when(this.requestBodyUriMock.header(any(), any())).thenReturn(this.requestBodyMock);
     when(this.requestBodyMock.body(any(), (Class<?>) any(Object.class))).thenReturn(this.requestHeadersMock);
     when(this.requestHeadersMock.retrieve()).thenReturn(this.responseMock);
     when(this.responseMock.bodyToMono(PenMatchResult.class)).thenReturn(Mono.just(penMatchResult));
@@ -80,10 +80,6 @@ public class RestUtilsTest {
     assertThat(response).isNotNull();
     assertThat(response.isPresent()).isTrue();
     assertThat(response.get().getPenStatus()).isNotNull();
-  }
-
-  private WebClient.RequestBodySpec returnMockBodySpec() {
-    return this.requestBodyMock;
   }
 
   private PenMatchStudent createPenMatchStudent() {
