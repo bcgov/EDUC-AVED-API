@@ -15,6 +15,7 @@ public class Request {
   /**
    * The Birth date.
    */
+  @Pattern(regexp = "^((19|20)\\d\\d)(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$")
   @Size(max = 8, min = 8)
   @NotNull(message = "birthDate cannot be null")
   String birthDate;
