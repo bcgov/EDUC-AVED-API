@@ -15,7 +15,7 @@ public class BcscPenRequest extends Request {
   /**
    * The DID.
    */
-  @Size(max = 30)
+  @Size(max = 255)
   @NotNull(message = "did cannot be null")
   String did;
   /**
