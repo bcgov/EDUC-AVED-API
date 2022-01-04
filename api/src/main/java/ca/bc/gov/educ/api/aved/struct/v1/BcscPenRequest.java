@@ -3,7 +3,7 @@ package ca.bc.gov.educ.api.aved.struct.v1;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -16,13 +16,13 @@ public class BcscPenRequest extends Request {
    * The DID.
    */
   @Size(max = 30)
-  @NotBlank
+  @NotNull
   String did;
   /**
    * The user display name.
    */
   @Size(max = 255)
-  @NotBlank
+  @NotNull
   String userDisplayName;
   /**
    * The given name.
@@ -38,13 +38,13 @@ public class BcscPenRequest extends Request {
    * The surname.
    */
   @Size(max = 255)
-  @NotBlank
+  @NotNull
   String surname;
   /**
    * The identity assurance level.
    */
   @Size(max = 1)
-  @NotBlank
+  @NotNull
   String identityAssuranceLevel;
   /**
    * The email.
