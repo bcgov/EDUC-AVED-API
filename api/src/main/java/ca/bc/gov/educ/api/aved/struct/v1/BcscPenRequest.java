@@ -16,13 +16,13 @@ public class BcscPenRequest extends Request {
    * The DID.
    */
   @Size(max = 30)
-  @NotNull
+  @NotNull(message = "did cannot be null")
   String did;
   /**
    * The user display name.
    */
   @Size(max = 255)
-  @NotNull
+  @NotNull(message = "userDisplayName cannot be null")
   String userDisplayName;
   /**
    * The given name.
@@ -38,13 +38,13 @@ public class BcscPenRequest extends Request {
    * The surname.
    */
   @Size(max = 255)
-  @NotNull
+  @NotNull(message = "surname cannot be null")
   String surname;
   /**
    * The identity assurance level.
    */
   @Size(max = 1)
-  @NotNull
+  @NotNull(message = "identityAssuranceLevel cannot be null")
   String identityAssuranceLevel;
   /**
    * The email.

@@ -15,7 +15,7 @@ public class PenValidationRequest extends PenRequest {
    * The PEN.
    */
   @Size(max = 9)
-  @NotNull
+  @NotNull(message = "pen cannot be null")
   String pen;
 
 }
