@@ -17,6 +17,7 @@ public class PenRequest extends Request {
    */
   @Size(max = 25)
   @NotNull
+  @NotBlank
   String legalSurname;
   /**
    * The Legal given name.
@@ -28,6 +29,7 @@ public class PenRequest extends Request {
    * The Legal middle name.
    */
   @Size(max = 25)
+  @NotBlank
   String legalMiddleName;
 
 }
