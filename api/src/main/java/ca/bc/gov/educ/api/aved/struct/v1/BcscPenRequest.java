@@ -2,10 +2,7 @@ package ca.bc.gov.educ.api.aved.struct.v1;
 
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * The type Request.
@@ -19,6 +16,7 @@ public class BcscPenRequest extends Request {
   @Size(max = 255)
   @NotNull(message = "did cannot be null")
   @NotBlank
+  @Pattern(regexp = "^[a-zA-Z0-9]+$")
   String did;
   /**
    * The user display name.
