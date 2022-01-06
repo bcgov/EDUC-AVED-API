@@ -14,18 +14,18 @@ public class PenRequest extends Request {
   /**
    * The Legal surname.
    */
-  @Size(max = 25)
+  @Size(min = 1, max = 255)
   @NotBlank
   String legalSurname;
   /**
    * The Legal given name.
    */
-  @Size(max = 25)
+  @Size(min = 1, max = 255)
   String legalGivenName;
   /**
    * The Legal middle name.
    */
-  @Size(max = 25)
+  @Size(min = 1, max = 255)
   String legalMiddleName;
 
 }
