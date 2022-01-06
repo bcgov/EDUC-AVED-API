@@ -2,7 +2,10 @@ package ca.bc.gov.educ.api.aved.struct.v1;
 
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * The type Request.
@@ -14,16 +17,14 @@ public class BcscPenRequest extends Request {
    * The DID.
    */
   @Size(max = 255)
-  @NotNull(message = "did cannot be null")
-  @NotBlank
+  @NotBlank(message = "did cannot be null")
   @Pattern(regexp = "^[a-zA-Z0-9]+$")
   String did;
   /**
    * The user display name.
    */
   @Size(max = 255)
-  @NotNull(message = "userDisplayName cannot be null")
-  @NotBlank
+  @NotBlank(message = "userDisplayName cannot be null")
   String userDisplayName;
   /**
    * The given name.
@@ -39,15 +40,13 @@ public class BcscPenRequest extends Request {
    * The surname.
    */
   @Size(max = 255)
-  @NotNull(message = "surname cannot be null")
-  @NotBlank
+  @NotBlank(message = "surname cannot be null")
   String surname;
   /**
    * The identity assurance level.
    */
   @Size(max = 1)
-  @NotNull(message = "identityAssuranceLevel cannot be null")
-  @NotBlank
+  @NotBlank(message = "identityAssuranceLevel cannot be null")
   String identityAssuranceLevel;
   /**
    * The email.
