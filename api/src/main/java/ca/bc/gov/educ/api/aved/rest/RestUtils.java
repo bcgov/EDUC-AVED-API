@@ -95,16 +95,16 @@ public class RestUtils {
 
   public Optional<SoamLoginEntity> performLink(BcscPenRequest servicesCard) {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.add("birthDate", servicesCard.getBirthDate());
-    map.add("did", servicesCard.getDid());
-    map.add("email", servicesCard.getEmail());
-    map.add("gender", servicesCard.getGender());
-    map.add("givenName", servicesCard.getGivenName());
-    map.add("givenNames", servicesCard.getGivenNames());
-    map.add("identityAssuranceLevel", servicesCard.getIdentityAssuranceLevel());
-    map.add("postalCode", servicesCard.getPostalCode());
-    map.add("surname", servicesCard.getSurname());
-    map.add("userDisplayName", servicesCard.getUserDisplayName());
+    addValueToMapIfNotNull(map, "birthDate", servicesCard.getBirthDate());
+    addValueToMapIfNotNull(map, "did", servicesCard.getDid());
+    addValueToMapIfNotNull(map, "email", servicesCard.getEmail());
+    addValueToMapIfNotNull(map, "gender", servicesCard.getGender());
+    addValueToMapIfNotNull(map, "givenName", servicesCard.getGivenName());
+    addValueToMapIfNotNull(map, "givenNames", servicesCard.getGivenNames());
+    addValueToMapIfNotNull(map, "identityAssuranceLevel", servicesCard.getIdentityAssuranceLevel());
+    addValueToMapIfNotNull(map, "postalCode", servicesCard.getPostalCode());
+    addValueToMapIfNotNull(map, "surname", servicesCard.getSurname());
+    addValueToMapIfNotNull(map, "userDisplayName", servicesCard.getUserDisplayName());
 
     try {
       val response = this.webClient.post()
@@ -126,6 +126,12 @@ public class RestUtils {
       return Optional.of(response);
     } catch (final WebClientResponseException e) {
       throw new AvedAPIRuntimeException(this.getErrorMessageString(e.getStatusCode(), e.getResponseBodyAsString()));
+    }
+  }
+
+  private void addValueToMapIfNotNull(final MultiValueMap<String, String> map, final String key, final String value) {
+    if (value != null) {
+      map.add(key, value);
     }
   }
 
