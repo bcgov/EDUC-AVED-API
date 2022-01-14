@@ -3,6 +3,7 @@ package ca.bc.gov.educ.api.aved.struct.v1;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -28,4 +29,10 @@ public class PenRequest extends Request {
   @Size(min = 1, max = 255)
   String legalMiddleName;
 
+  /**
+   * The Postal code.
+   */
+  @Size(max = 6, min = 6)
+  @Pattern(regexp = "^([A-Z]\\d[A-Z]\\d[A-Z]\\d|)$")
+  String postalCode;
 }

@@ -55,4 +55,12 @@ public class BcscPenRequest extends Request {
   @Email(message = "Email must be valid email address.")
   String email;
 
+  /**
+   * The Postal code.
+   */
+  @Size(max = 6, min = 6)
+  @Pattern(regexp = "^([A-Z]\\d[A-Z]\\d[A-Z]\\d|)$")
+  @NotBlank(message = "postalCode cannot be null")
+  String postalCode;
+
 }
