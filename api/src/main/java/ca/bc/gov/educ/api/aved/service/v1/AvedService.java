@@ -46,9 +46,9 @@ public class AvedService {
   }
 
   public Pair<Integer, BcscPenRequestResult> postToSOAMAPI(final BcscPenRequest request) {
-    Optional<SoamLoginEntity> optional = this.restUtils.performLink(request);
-    if(optional.isPresent()) {
-      return Pair.of(HttpStatus.OK.value(), getBcscPenRequestResult(optional.get(), request));
+    Pair <Optional<SoamLoginEntity>,HttpStatus> pair = this.restUtils.performLink(request);
+    if(pair.getLeft().isPresent()) {
+      return Pair.of(pair.getRight().value(), getBcscPenRequestResult(pair.getLeft().get(), request));
     } else {
       throw new AvedAPIRuntimeException("Error occurred while calling SOAM API");
     }

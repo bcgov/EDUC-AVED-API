@@ -1,33 +1,26 @@
 package ca.bc.gov.educ.api.aved.rest;
 
 import ca.bc.gov.educ.api.aved.exception.AvedAPIRuntimeException;
+import ca.bc.gov.educ.api.aved.exception.MultipleMatchesException;
 import ca.bc.gov.educ.api.aved.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.aved.struct.v1.BcscPenRequest;
-import ca.bc.gov.educ.api.aved.struct.v1.PenRequest;
-import ca.bc.gov.educ.api.aved.struct.v1.PenRequestResult;
-import ca.bc.gov.educ.api.aved.struct.v1.PenValidationRequest;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchStudent;
 import ca.bc.gov.educ.api.aved.struct.v1.soam.SoamLoginEntity;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.jboss.logging.MDC;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.lang.NonNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
-import java.util.UUID;
-
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 /**
  * The type Rest utils.
@@ -93,7 +86,7 @@ public class RestUtils {
     }
   }
 
-  public Optional<SoamLoginEntity> performLink(BcscPenRequest servicesCard) {
+  public Pair<Optional<SoamLoginEntity>, HttpStatus> performLink(BcscPenRequest servicesCard) {
     MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     addValueToMapIfNotNull(map, "birthDate", servicesCard.getBirthDate());
     addValueToMapIfNotNull(map, "did", servicesCard.getDid());
@@ -112,6 +105,9 @@ public class RestUtils {
         .header(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
         .body(Mono.just(map), MultiValueMap.class)
         .retrieve()
+        .onStatus(
+          HttpStatus.MULTIPLE_CHOICES::equals,
+          responseMultiple -> responseMultiple.bodyToMono(SoamLoginEntity.class).map(MultipleMatchesException::new))
         .bodyToMono(SoamLoginEntity.class)
         .doOnSuccess(entity -> {
           if (entity != null) {
@@ -123,9 +119,11 @@ public class RestUtils {
         throw new AvedAPIRuntimeException(this.getErrorMessageString(HttpStatus.INTERNAL_SERVER_ERROR, NULL_BODY_FROM +
           "SOAM link get call."));
       }
-      return Optional.of(response);
+      return Pair.of(Optional.of(response), HttpStatus.OK);
     } catch (final WebClientResponseException e) {
       throw new AvedAPIRuntimeException(this.getErrorMessageString(e.getStatusCode(), e.getResponseBodyAsString()));
+    } catch (final MultipleMatchesException e) {
+      return Pair.of(Optional.of(e.getSoamLoginEntity()), HttpStatus.MULTIPLE_CHOICES);
     }
   }
 
