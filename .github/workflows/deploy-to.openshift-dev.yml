@@ -20,16 +20,15 @@ env:
   # 🖊️ EDIT to specify custom tags for the container image, or default tags will be generated below.
   IMAGE_TAGS: ""
 
-  SPRING_BOOT_IMAGE_NAME: edx-api-master
+  SPRING_BOOT_IMAGE_NAME: aved-api-master
   DOCKER_ARTIFACTORY_REPO: docker-remote.artifacts.developer.gov.bc.ca
   ARTIFACTORY_REPO: artifacts.developer.gov.bc.ca
 
-  APP_NAME: 'edx-api'
-  DB_NAME: 'edx_api'
-  REPO_NAME: "educ-edx-api"
+  APP_NAME: 'aved-api'
+  REPO_NAME: "educ-aved-api"
   BRANCH: "master"
-  APP_NAME_FULL: "edx-api-master"
-  NAMESPACE: ${{ secrets.EDX_NAMESPACE_NO_ENV }}
+  APP_NAME_FULL: "aved-api-master"
+  NAMESPACE: ${{ secrets.CLIENT_NAMESPACE_NO_ENV }}
   COMMON_NAMESPACE: ${{ secrets.COMMON_NAMESPACE_NO_ENV }}
   TAG: "latest"
   TARGET_ENV: "dev"
