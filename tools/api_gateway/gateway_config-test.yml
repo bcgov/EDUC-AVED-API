@@ -1,19 +1,20 @@
 services:
-  - name: educ-aved-api-prod
+  - name: educ-aved-api-test
     host: ${AVED-SVC-ROUTE}
-    tags: [ ns.educ-pen-aved ]
+    tags: [ ns.educ-aved-test ]
     port: 8080
     protocol: http
     retries: 0
     routes:
-      - name: educ-aved-api-prod-route
-        tags: [ ns.educ-pen-aved ]
+      - name: educ-aved-api-test-route
+        tags: [ ns.educ-aved-test ]
         hosts:
-          - educ-aved.api.gov.bc.ca
+          - educ-aved-api.test.api.gov.bc.ca
         paths:
           - /
         methods:
           - POST
+          - GET
         strip_path: false
         https_redirect_status_code: 426
         path_handling: v0
