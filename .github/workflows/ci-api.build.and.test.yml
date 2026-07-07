@@ -35,9 +35,9 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          key: ${{ runner.os }}-java18-maven-${{ hashFiles('api/pom.xml', '.github/workflows/ci-api.build.and.test.yml') }}
+      - name: Print Java and Maven versions
+        run: mvn -v
       - name: Run unit tests
         run: mvn -f pom.xml clean package
       - name: Run Sonar Analysis
