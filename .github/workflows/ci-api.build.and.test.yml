@@ -11,14 +11,18 @@ on:
       - 'Fix/*'
     paths:
       - 'api/**'
+      - '.github/workflows/ci-api.build.and.test.yml'
   pull_request:
     branches: [ master ]
     paths:
       - 'api/**'
+      - '.github/workflows/ci-api.build.and.test.yml'
 jobs:
   quality_profile:
 
     runs-on: ubuntu-latest
+    env:
+      MAVEN_REPO_LOCAL: ${{ github.workspace }}/.m2/repository
 
     defaults:
       run:
@@ -33,16 +37,14 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 18
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-5Jun-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-5Jun-
+      - name: Reset local Maven repository
+        run: rm -rf "$MAVEN_REPO_LOCAL"
+      - name: Print Java and Maven versions
+        run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" -v
       - name: Run unit tests
-        run: mvn -f pom.xml clean package
+        run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" -f pom.xml clean package
       - name: Run Sonar Analysis
-        run: mvn sonar:sonar
+        run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" sonar:sonar
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.organization=bcgov-sonarcloud
