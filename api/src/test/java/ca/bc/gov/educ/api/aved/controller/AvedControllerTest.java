@@ -1,5 +1,6 @@
 package ca.bc.gov.educ.api.aved.controller;
 
+import ca.bc.gov.educ.api.aved.AvedAPIApplication;
 import ca.bc.gov.educ.api.aved.AvedApiApplicationTests;
 import ca.bc.gov.educ.api.aved.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.aved.rest.RestUtils;
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = AvedAPIApplication.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 public class AvedControllerTest  {

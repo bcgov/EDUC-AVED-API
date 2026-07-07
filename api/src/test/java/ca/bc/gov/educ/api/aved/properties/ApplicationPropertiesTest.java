@@ -1,5 +1,6 @@
 package ca.bc.gov.educ.api.aved.properties;
 
+import ca.bc.gov.educ.api.aved.AvedAPIApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(classes = AvedAPIApplication.class)
 public class ApplicationPropertiesTest {
   @Autowired
   ApplicationProperties properties;
