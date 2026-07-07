@@ -1,5 +1,6 @@
 package ca.bc.gov.educ.api.aved.service;
 
+import ca.bc.gov.educ.api.aved.AvedAPIApplication;
 import ca.bc.gov.educ.api.aved.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.aved.rest.RestUtils;
 import ca.bc.gov.educ.api.aved.service.v1.AvedService;
@@ -22,7 +23,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(classes = AvedAPIApplication.class)
 public class AvedServiceTest {
 
   private static final String correlationID = UUID.randomUUID().toString();

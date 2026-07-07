@@ -1,5 +1,6 @@
 package ca.bc.gov.educ.api.aved.rest;
 
+import ca.bc.gov.educ.api.aved.AvedAPIApplication;
 import ca.bc.gov.educ.api.aved.properties.ApplicationProperties;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchResult;
 import ca.bc.gov.educ.api.aved.struct.v1.penmatch.PenMatchStudent;
@@ -28,7 +29,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(classes = AvedAPIApplication.class)
 @SuppressWarnings("java:S5778")
 public class RestUtilsTest {
   private static final String correlationID = UUID.randomUUID().toString();
