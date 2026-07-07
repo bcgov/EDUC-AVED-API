@@ -27,17 +27,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - uses: actions/setup-java@v3
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 18
+        uses: actions/setup-java@v4
         with:
+          distribution: 'corretto'
           java-version: 18
-          distribution: oracle
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-java18-maven-${{ hashFiles('api/pom.xml', '.github/workflows/ci-api.build.and.test.yml') }}
-      - name: Print Java and Maven versions
-        run: mvn -v
+          key: ${{ runner.os }}-maven-5Jun-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-5Jun-
       - name: Run unit tests
         run: mvn -f pom.xml clean package
       - name: Run Sonar Analysis
