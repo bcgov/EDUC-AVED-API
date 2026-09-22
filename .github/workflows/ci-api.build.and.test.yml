@@ -43,9 +43,14 @@ jobs:
         run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" -v
       - name: Run unit tests
         run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" -f pom.xml clean package
+      - name: setup java 21 for sonar analysis
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
       - name: Run Sonar Analysis
         run: mvn -Dmaven.repo.local="$MAVEN_REPO_LOCAL" sonar:sonar
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.organization=bcgov-sonarcloud
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
